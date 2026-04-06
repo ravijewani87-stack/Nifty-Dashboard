@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nifty Options Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+ 
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+ 
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HEADER                                                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-left">
+    <span class="logo">📊</span>
+    <div>
+      <h1>Nifty Options Dashboard</h1>
+      <span class="sub">NSE Free Data · Supabase Realtime · Signals Only — Calls &amp; Puts</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="status-dot" id="statusDot"></span>
+    <span id="statusText" class="status-text">Connecting...</span>
+    <span class="sep">|</span>
+    <span id="lastUpdated" class="muted">—</span>
+  </div>
+</header>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  KPI ROW                                                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="kpi-row" id="kpiRow">
+  <div class="kpi-card">
+    <div class="kpi-label">Nifty Spot</div>
+    <div class="kpi-value" id="kpiSpot">—</div>
+    <div class="kpi-sub" id="kpiAtm">ATM: —</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">PCR</div>
+    <div class="kpi-value" id="kpiPcr">—</div>
+    <div class="kpi-sub" id="kpiPcrLabel">—</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">IV Rank</div>
+    <div class="kpi-value" id="kpiIvRank">—</div>
+    <div class="kpi-sub" id="kpiIvLabel">—</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">ATM IV</div>
+    <div class="kpi-value" id="kpiAtmIv">—</div>
+    <div class="kpi-sub">Implied Volatility</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Max Pain</div>
+    <div class="kpi-value" id="kpiMaxPain">—</div>
+    <div class="kpi-sub" id="kpiMpGap">—</div>
+  </div>
+  <div class="kpi-card highlight">
+    <div class="kpi-label">Active Signals</div>
+    <div class="kpi-value" id="kpiSignals">—</div>
+    <div class="kpi-sub" id="kpiExits">— exits</div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TABS                                                      -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="signals">🚨 Live Signals</button>
+  <button class="tab-btn" data-tab="chain">📋 Option Chain</button>
+  <button class="tab-btn" data-tab="charts">📈 OI &amp; IV Charts</button>
+  <button class="tab-btn" data-tab="positions">💼 My Positions</button>
+  <button class="tab-btn" data-tab="guide">📖 Guide</button>
+</div>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TAB: SIGNALS                                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="tab-content active" id="tab-signals">
+  <!-- Exit alerts -->
+  <div id="exitContainer"></div>
+ 
+  <div class="signals-grid">
+    <div>
+      <h2 class="section-title green">🟢 BUY CALL Signals</h2>
+      <div id="callSignals"><div class="empty-state">No call signals yet</div></div>
+    </div>
+    <div>
+      <h2 class="section-title red">🔴 BUY PUT Signals</h2>
+      <div id="putSignals"><div class="empty-state">No put signals yet</div></div>
+    </div>
+  </div>
+ 
+  <div style="margin-top:24px">
+    <h2 class="section-title blue">👁️ Watchlist — Approaching Signal</h2>
+    <div id="watchSignals"><div class="empty-state">Nothing approaching yet</div></div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TAB: OPTION CHAIN                                        -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="tab-content" id="tab-chain">
+  <div class="chain-controls">
+    <label>Expiry:
+      <select id="chainExpiry"></select>
+    </label>
+    <label>Show:
+      <select id="chainFilter">
+        <option value="all">All Strikes</option>
+        <option value="buildup">OI Buildup Only</option>
+        <option value="unwinding">OI Unwinding Only</option>
+      </select>
+    </label>
+    <span class="legend">
+      <span class="dot green"></span>Buildup
+      <span class="dot red"></span>Unwinding
+      <span class="dot gold"></span>ATM
+    </span>
+  </div>
+  <div class="table-wrap">
+    <table class="chain-table" id="chainTable">
+      <thead>
+        <tr>
+          <th>Call OI</th>
+          <th>C OI Δ%</th>
+          <th>C Vol</th>
+          <th>Call IV%</th>
+          <th>Call Δ</th>
+          <th>Call LTP</th>
+          <th class="strike-col">STRIKE</th>
+          <th>Put LTP</th>
+          <th>Put Δ</th>
+          <th>Put IV%</th>
+          <th>P Vol</th>
+          <th>P OI Δ%</th>
+          <th>Put OI</th>
+          <th>Flag</th>
+        </tr>
+      </thead>
+      <tbody id="chainBody">
+        <tr><td colspan="14" class="empty-state">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TAB: CHARTS                                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="tab-content" id="tab-charts">
+  <div class="chart-expiry-row">
+    <label>Expiry: <select id="chartExpiry"></select></label>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Open Interest by Strike</h3>
+      <canvas id="oiChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>OI Change (Buildup / Unwinding)</h3>
+      <canvas id="oiChangeChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>IV Skew</h3>
+      <canvas id="ivChart"></canvas>
+    </div>
+    <div class="chart-card pcr-card">
+      <h3>PCR Gauge</h3>
+      <div class="pcr-gauge-wrap">
+        <canvas id="pcrChart"></canvas>
+        <div class="pcr-labels">
+          <span class="green">0 ← Bullish (Buy Calls)</span>
+          <span class="yellow">Neutral</span>
+          <span class="red">Bearish (Buy Puts) → 2.5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TAB: POSITIONS                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="tab-content" id="tab-positions">
+  <div class="pos-layout">
+    <div class="pos-form-card">
+      <h3>➕ Add Position</h3>
+      <p class="muted">Track a position to receive exit alerts</p>
+      <form id="posForm">
+        <label>Symbol (e.g. NIFTY25APR22350CE)
+          <input type="text" id="posSymbol" placeholder="NIFTY25APR22350CE" required />
+        </label>
+        <div class="form-row">
+          <label>Buy Price ₹
+            <input type="number" id="posBuyPrice" min="1" step="0.5" value="100" required />
+          </label>
+          <label>Type
+            <select id="posType"><option>CE</option><option>PE</option></select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Strike
+            <input type="number" id="posStrike" step="50" value="22350" required />
+          </label>
+          <label>Expiry
+            <input type="date" id="posExpiry" required />
+          </label>
+        </div>
+        <label>Notes (optional)
+          <input type="text" id="posNotes" placeholder="e.g. PCR trade, target ₹200" />
+        </label>
+        <button type="submit" class="btn-primary">Add Position</button>
+      </form>
+    </div>
+ 
+    <div class="pos-list-card">
+      <h3>📂 Open Positions</h3>
+      <div id="positionsList"><div class="empty-state">No positions added yet</div></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  TAB: GUIDE                                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<section class="tab-content" id="tab-guide">
+  <div class="guide-grid">
+    <div class="guide-card">
+      <h3>🧮 Signal Scoring (out of 10)</h3>
+      <table class="guide-table">
+        <thead><tr><th>Factor</th><th>Max Pts</th><th>Condition</th></tr></thead>
+        <tbody>
+          <tr><td>PCR Sentiment</td><td class="center">+2</td><td>PCR &lt;0.70 (calls) / &gt;1.30 (puts)</td></tr>
+          <tr><td>IV Rank Low</td><td class="center">+2</td><td>IV Rank &lt;20% = very cheap options</td></tr>
+          <tr><td>OI Buildup</td><td class="center">+2</td><td>OI grew &gt;15% on this strike</td></tr>
+          <tr><td>Delta Zone</td><td class="center">+1</td><td>0.25 ≤ |Δ| ≤ 0.60 (sweet spot)</td></tr>
+          <tr><td>Volume</td><td class="center">+1</td><td>&gt;1,000 contracts traded</td></tr>
+          <tr><td>Max Pain</td><td class="center">+1</td><td>Spot on right side of max pain</td></tr>
+          <tr><td>Gamma</td><td class="center">+1</td><td>Γ ≥ 0.0005 (near ATM)</td></tr>
+          <tr class="total-row"><td><b>Signal fires at</b></td><td class="center"><b>≥6</b></td><td><b>Configure in Python script</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div class="guide-card">
+      <h3>📤 Exit Signal Logic</h3>
+      <div class="guide-list">
+        <div class="guide-item">🎯 <b>+50% profit</b> reached — take profits, don't get greedy</div>
+        <div class="guide-item">🛑 <b>-30% loss</b> — cut and move on, protect capital</div>
+        <div class="guide-item">📈 <b>IV Rank &gt;70%</b> — your option is now expensive, book it</div>
+        <div class="guide-item">👻 <b>OI Unwinding</b> — smart money leaving this strike</div>
+        <div class="guide-item">💰 <b>|Δ| &gt;0.75</b> — deep ITM, lock in the gains</div>
+        <div class="guide-item">🔄 <b>PCR reversal</b> — market bias flipped against you</div>
+        <div class="guide-item">⏰ <b>Expiry tomorrow</b> — exit before theta crush kicks in</div>
+      </div>
+    </div>
+ 
+    <div class="guide-card wide">
+      <h3>🧠 How Professional Traders Read Options Data</h3>
+      <div class="guide-sections">
+        <div>
+          <h4>PCR as Contrarian Sentiment</h4>
+          <p>When PCR &lt;0.70, there are far more calls open than puts — the market is crowded bullish but protected. Institutional hedging makes sharp falls less likely. This is when you buy calls cheaply, before the crowd notices. When PCR &gt;1.30, the reverse is true — buy puts before the pullback comes.</p>
+        </div>
+        <div>
+          <h4>IV Rank: Buy When Cheap, Exit When Expensive</h4>
+          <p>Professional options traders never buy options when IV is high — you're overpaying for every rupee of premium. IV Rank &lt;30% means options are cheap <i>relative to their own history</i>. When volatility mean-reverts upward (which it always does), you profit from both the price move AND the volatility expansion (vega profit). This is a double tailwind.</p>
+        </div>
+        <div>
+          <h4>OI Buildup = Follow the Big Money</h4>
+          <p>Volume shows who traded today. OI shows who is <i>still committed</i>. A 15–30% spike in OI at a specific strike means institutional money just opened a large position there. These strikes tend to act as magnets or walls. Fresh OI buildup in calls = smart money betting on upside = time to consider calls.</p>
+        </div>
+        <div>
+          <h4>Max Pain: The Expiry Magnet</h4>
+          <p>Market makers are short options across all strikes. They're financially incentivized to pin the index near the level where the most options expire worthless — the Max Pain strike. In the last trading session of expiry week, price gravitates toward Max Pain roughly 70% of the time. Use this to bias your direction near expiry.</p>
+        </div>
+        <div>
+          <h4>Delta: The Strike Sweet Spot</h4>
+          <p>Δ 0.30–0.50 options give the best risk-reward for directional trades. Δ &lt;0.20 = lottery ticket (needs a massive move). Δ &gt;0.65 = expensive, behaves like the underlying itself. The 0.25–0.60 zone gives you enough leverage to make money on a moderate move without paying too much premium.</p>
+        </div>
+        <div>
+          <h4>Gamma: Responsiveness</h4>
+          <p>Gamma tells you how fast your delta changes as the market moves. High gamma (near ATM) = your option responds sharply to every tick. Low gamma (far OTM or ITM) = slow response. For momentum trades, favor higher gamma strikes. For positional swings, lower gamma gives more stable delta exposure.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  FOOTER                                                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<footer>
+  <span>Data: NSE India (free) · Realtime: Supabase · Hosted: Vercel</span>
+  <span>GitHub Actions refreshes data every 5 min during market hours</span>
+</footer>
+ 
+<!-- Alert toast -->
+<div id="toast" class="toast hidden"></div>
+ 
+<script src="app.js"></script>
+</body>
+</html>
