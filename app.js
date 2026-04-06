@@ -7,8 +7,8 @@
 // These are public-safe (anon key only).
 // Set them via environment variables injected at build time,
 // OR just replace the placeholder strings below.
-const SUPABASE_URL = window.__SUPABASE_URL__ || 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = window.__SUPABASE_ANON_KEY__ || 'YOUR_ANON_KEY';
+const SUPABASE_URL = 'https://oaafskicmdswgmfnsvck.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9hYWZza2ljbWRzd2dtZm5zdmNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0NTg2MTIsImV4cCI6MjA5MTAzNDYxMn0.Yfs74fCvQ0N4bYJEfDj_kKA0mn4rSFstFmyNeMMa7VI';
  
 // ── Init Supabase ─────────────────────────────────────────────
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
