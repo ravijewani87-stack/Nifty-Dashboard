@@ -2,9 +2,9 @@
    NIFTY OPTIONS DASHBOARD — Styles
    Dark trading terminal theme
    ══════════════════════════════════════════════════════════════ */
- 
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
 :root {
   --bg:        #0e1117;
   --bg2:       #14161f;
@@ -26,7 +26,7 @@
   --radius:    10px;
   --shadow:    0 2px 12px rgba(0,0,0,.4);
 }
- 
+
 html { font-size: 14px; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -36,7 +36,7 @@ body {
   display: flex;
   flex-direction: column;
 }
- 
+
 /* ── HEADER ─────────────────────────────────────────────────── */
 header {
   display: flex;
@@ -61,7 +61,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 .sep { color: var(--border); }
 .muted { color: var(--muted); }
- 
+
 /* ── KPI ROW ─────────────────────────────────────────────────── */
 .kpi-row {
   display: grid;
@@ -73,7 +73,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 }
 @media(max-width:900px){ .kpi-row { grid-template-columns: repeat(3,1fr); } }
 @media(max-width:600px){ .kpi-row { grid-template-columns: repeat(2,1fr); } }
- 
+
 .kpi-card {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -90,7 +90,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .kpi-value.red   { color: var(--red); }
 .kpi-value.yellow{ color: var(--yellow); }
 .kpi-value.blue  { color: var(--blue); }
- 
+
 /* ── TABS ───────────────────────────────────────────────────── */
 .tabs-bar {
   display: flex;
@@ -113,10 +113,10 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 }
 .tab-btn:hover  { color: var(--text); }
 .tab-btn.active { color: var(--text); border-bottom-color: var(--blue); font-weight: 600; }
- 
+
 .tab-content { display: none; padding: 20px 24px; flex: 1; }
 .tab-content.active { display: block; }
- 
+
 /* ── SIGNAL CARDS ───────────────────────────────────────────── */
 .signals-grid {
   display: grid;
@@ -125,13 +125,13 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
   margin-top: 8px;
 }
 @media(max-width:800px){ .signals-grid { grid-template-columns: 1fr; } }
- 
+
 .section-title { font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
 .section-title.green { color: var(--green); }
 .section-title.red   { color: var(--red); }
 .section-title.blue  { color: var(--blue); }
 .section-title.yellow{ color: var(--yellow); }
- 
+
 .sig-card {
   border-radius: var(--radius);
   padding: 14px 16px;
@@ -142,7 +142,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .sig-card.put   { background: var(--red-bg);   border-color: var(--red); }
 .sig-card.exit  { background: var(--yellow-bg);border-color: var(--yellow); }
 .sig-card.watch { background: var(--blue-bg);  border-color: var(--blue); }
- 
+
 .sig-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .badge {
   display: inline-block;
@@ -156,18 +156,18 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .badge.put   { background: var(--red);   color: #fff; }
 .badge.exit  { background: var(--yellow);color: #000; }
 .badge.watch { background: var(--blue);  color: #fff; }
- 
+
 .sig-title  { font-size: .95rem; font-weight: 700; }
 .sig-score  { margin-left: auto; font-size: .8rem; color: var(--muted); }
- 
+
 .score-bar-wrap { margin: 6px 0; }
 .score-bar-bg   { height: 5px; background: var(--border); border-radius: 3px; }
 .score-bar-fill { height: 5px; border-radius: 3px; transition: width .4s; }
- 
+
 .sig-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: .82rem; margin: 6px 0; }
 .sig-meta span { color: var(--muted); }
 .sig-meta b    { color: var(--text); }
- 
+
 .sig-greeks {
   display: flex;
   gap: 14px;
@@ -181,12 +181,12 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 }
 .sig-greeks span { color: var(--muted); }
 .sig-greeks b    { color: var(--text); }
- 
+
 .sig-reasons { font-size: .78rem; color: var(--muted); margin-top: 6px; }
 .sig-reasons .reason { margin: 2px 0; }
 .sig-reasons .reason::before { content: "✅ "; }
 .sig-reasons.exit-reasons .reason::before { content: "⚠️ "; }
- 
+
 .oi-badge {
   display: inline-block;
   padding: 1px 7px;
@@ -197,7 +197,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .oi-badge.buildup   { background: rgba(0,200,83,.2);  color: var(--green); }
 .oi-badge.unwinding { background: rgba(255,23,68,.2); color: var(--red); }
 .oi-badge.neutral   { background: var(--bg3);         color: var(--muted); }
- 
+
 /* EXIT ALERTS BAR */
 .exit-bar {
   background: var(--yellow-bg);
@@ -207,7 +207,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
   margin-bottom: 16px;
 }
 .exit-bar-title { color: var(--yellow); font-weight: 700; margin-bottom: 10px; }
- 
+
 /* ── OPTION CHAIN TABLE ─────────────────────────────────────── */
 .chain-controls {
   display: flex;
@@ -230,7 +230,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .dot.green { background: var(--green); }
 .dot.red   { background: var(--red); }
 .dot.gold  { background: var(--gold); }
- 
+
 .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
 .chain-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
 .chain-table th {
@@ -259,7 +259,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .chain-table td.strike-col .atm-star { color: var(--gold); font-size: .8rem; }
 .chain-table .positive { color: var(--green); }
 .chain-table .negative { color: var(--red); }
- 
+
 /* ── CHARTS ─────────────────────────────────────────────────── */
 .chart-expiry-row { margin-bottom: 16px; }
 .chart-expiry-row label { font-size: .8rem; color: var(--muted); }
@@ -269,7 +269,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 }
 .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media(max-width:800px){ .charts-grid { grid-template-columns: 1fr; } }
- 
+
 .chart-card {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -284,11 +284,11 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
 .pcr-labels .green  { color: var(--green); }
 .pcr-labels .yellow { color: var(--yellow); text-align: center; }
 .pcr-labels .red    { color: var(--red); text-align: right; }
- 
+
 /* ── POSITIONS ──────────────────────────────────────────────── */
 .pos-layout { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
 @media(max-width:800px){ .pos-layout { grid-template-columns: 1fr; } }
- 
+
 .pos-form-card, .pos-list-card {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -296,7 +296,7 @@ header h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.3px; }
   padding: 20px;
 }
 .pos-form-card h3, .pos-list-card h3 { margin-bottom: 12px; }
- 
+
 form label { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; color: var(--muted); margin-bottom: 12px; }
 form input, form select, form textarea {
   background: var(--bg);
@@ -323,7 +323,7 @@ form input:focus, form select:focus { outline: none; border-color: var(--blue); 
   transition: opacity .15s;
 }
 .btn-primary:hover { opacity: .85; }
- 
+
 .pos-row {
   display: flex;
   align-items: center;
@@ -349,7 +349,7 @@ form input:focus, form select:focus { outline: none; border-color: var(--blue); 
   transition: background .15s;
 }
 .pos-delete:hover { background: rgba(255,23,68,.3); }
- 
+
 /* ── GUIDE ──────────────────────────────────────────────────── */
 .guide-grid { display: flex; flex-direction: column; gap: 20px; max-width: 1100px; }
 .guide-card {
@@ -374,7 +374,7 @@ form input:focus, form select:focus { outline: none; border-color: var(--blue); 
 @media(max-width:700px){ .guide-sections { grid-template-columns: 1fr; } }
 .guide-sections h4 { color: var(--blue); margin-bottom: 6px; font-size: .9rem; }
 .guide-sections p  { font-size: .85rem; color: var(--muted); line-height: 1.6; }
- 
+
 /* ── MISC ───────────────────────────────────────────────────── */
 .empty-state {
   text-align: center;
@@ -392,7 +392,7 @@ footer {
   color: var(--muted);
   margin-top: auto;
 }
- 
+
 .toast {
   position: fixed;
   bottom: 24px;
