@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nifty Options Dashboard</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
- 
+
   <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
- 
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  HEADER                                                    -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -33,7 +33,7 @@
     <span id="lastUpdated" class="muted">—</span>
   </div>
 </header>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  KPI ROW                                                   -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -69,7 +69,7 @@
     <div class="kpi-sub" id="kpiExits">— exits</div>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TABS                                                      -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -80,14 +80,14 @@
   <button class="tab-btn" data-tab="positions">💼 My Positions</button>
   <button class="tab-btn" data-tab="guide">📖 Guide</button>
 </div>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TAB: SIGNALS                                             -->
 <!-- ══════════════════════════════════════════════════════════ -->
 <section class="tab-content active" id="tab-signals">
   <!-- Exit alerts -->
   <div id="exitContainer"></div>
- 
+
   <div class="signals-grid">
     <div>
       <h2 class="section-title green">🟢 BUY CALL Signals</h2>
@@ -98,13 +98,13 @@
       <div id="putSignals"><div class="empty-state">No put signals yet</div></div>
     </div>
   </div>
- 
+
   <div style="margin-top:24px">
     <h2 class="section-title blue">👁️ Watchlist — Approaching Signal</h2>
     <div id="watchSignals"><div class="empty-state">Nothing approaching yet</div></div>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TAB: OPTION CHAIN                                        -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -152,7 +152,7 @@
     </table>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TAB: CHARTS                                              -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -186,7 +186,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TAB: POSITIONS                                           -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -221,14 +221,14 @@
         <button type="submit" class="btn-primary">Add Position</button>
       </form>
     </div>
- 
+
     <div class="pos-list-card">
       <h3>📂 Open Positions</h3>
       <div id="positionsList"><div class="empty-state">No positions added yet</div></div>
     </div>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  TAB: GUIDE                                               -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -250,7 +250,7 @@
         </tbody>
       </table>
     </div>
- 
+
     <div class="guide-card">
       <h3>📤 Exit Signal Logic</h3>
       <div class="guide-list">
@@ -263,7 +263,7 @@
         <div class="guide-item">⏰ <b>Expiry tomorrow</b> — exit before theta crush kicks in</div>
       </div>
     </div>
- 
+
     <div class="guide-card wide">
       <h3>🧠 How Professional Traders Read Options Data</h3>
       <div class="guide-sections">
@@ -295,7 +295,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!--  FOOTER                                                    -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -303,10 +303,10 @@
   <span>Data: NSE India (free) · Realtime: Supabase · Hosted: Vercel</span>
   <span>GitHub Actions refreshes data every 5 min during market hours</span>
 </footer>
- 
+
 <!-- Alert toast -->
 <div id="toast" class="toast hidden"></div>
- 
+
 <script src="app.js"></script>
 </body>
 </html>
